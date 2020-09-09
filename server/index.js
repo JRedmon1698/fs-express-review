@@ -19,8 +19,19 @@ app.use(bodyParser.urlencoded({ extended: true }));
   Use Postman to test. Note: you may have to change the body type in Postman to JSON
 */
 
-app.get('/file', () => {
-  throw new Error('Fix Me')
+app.post('/file', (req, res) => {
+
+  const { body } = req;
+  const serializedBody = JSON.stringify(body); 
+
+  fs.writeFile(FILE_PATH, serializedBody, err => {
+    if (err) {
+      console.log(err);
+      res.sendStatus(500);
+    } else {
+      res.sendStatus(201);
+    }
+  })
 });
 
 /* 
@@ -30,8 +41,16 @@ app.get('/file', () => {
   Use Postman to test.
 */
 
-app.post('/file', () => {
-  throw new Error('Fix Me')
+app.get('/file', (req, res) => {
+  fs.readFile(FILE_PATH, (err, data) => {
+    if (err) {
+      console.log(err);
+      res.sendStatus(500);
+    } else {
+      const parsedData = JSON.parse(data);
+      res.json(parsedData);
+    }
+  })
 })
 
 app.listen(PORT, () => {
