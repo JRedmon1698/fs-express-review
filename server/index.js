@@ -19,8 +19,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
   Use Postman to test. Note: you may have to change the body type in Postman to JSON
 */
 
-app.post('/file', () => {
-  throw new Error('Fix Me')
+app.post('/file', (req, res) => {
+  fs.writeFile(FILE_PATH, req.body, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('Success!');
+      res.status(201).json(req.body);
+    }
+  });
 });
 
 /* 
